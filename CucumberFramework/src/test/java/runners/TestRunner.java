@@ -4,17 +4,17 @@ import io.cucumber.junit.CucumberOptions;
 import io.cucumber.junit.Cucumber;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(//plugin = {"pretty","html:target/cucumber-reports"}
+@CucumberOptions(plugin = {"pretty","html:target/cucumber-reports-1.html"}
 		//,monochrome = true
 		//,
 		//features ={"src/test/resources/Features/LoginApplication.feature"}
-				//, features ={"src/test/resources/Features/seleniumEasyDemoSite.feature"}
-				//features ={"src/test/resources/Features/End2EndTests.feature"}
-		features ={"src/test/resources/Features/End2EndTests.feature"}
 		//features ={"src/test/resources/Features/seleniumEasyDemoSite.feature"}
+		,features ={"src/test/resources/Features/End2EndTests.feature"}
+		//,features ={"src/test/resources/Features/seleniumEasyDemoSite.feature"}
 		,glue= {"stepDefinitions"}
-		, tags ="@Tag1 or @Tag2"		
+		, tags = "@Tooltip"	
 		
+		//,tags="@Tag1 or @Tag2"	
 		)
 
 public class TestRunner {
