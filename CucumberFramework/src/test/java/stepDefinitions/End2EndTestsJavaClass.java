@@ -1,13 +1,19 @@
 package stepDefinitions;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -15,7 +21,8 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 
-
+import io.cucumber.java.After;
+import io.cucumber.java.AfterStep;
 import io.cucumber.java.Before;
 import io.cucumber.java.BeforeAll;
 import io.cucumber.java.en.Given;
@@ -27,7 +34,7 @@ public class End2EndTestsJavaClass {
 
 
 	WebDriver driver ;
-	//	https://demo.guru99.com/test/delete_customer.php
+	
 	@Given("user launches the Window Popup url")
 	public void user_launches_the_window_popup_url() {
 		System.setProperty("webdriver.edgedriver.driver", "D:\\Selenium Tutorial\\edgedriver_win64\\msedgedriver.exe");
@@ -131,17 +138,17 @@ public class End2EndTestsJavaClass {
 	@When("user hovers the mouse over the icon")
 	public void user_hovers_the_mouse_over_the_icon() {
 
-		
-	WebElement element = driver.findElement(By.xpath("//*[@class=\"socialbtns\"]/div/a[4]"));
-		
+
+		WebElement element = driver.findElement(By.xpath("//*[@class=\"socialbtns\"]/div/a[4]"));
+
 		Actions action = new Actions(driver);
 		action.moveToElement(element).build().perform();
 		System.out.println("Hovered over the tool tip");
-		
+
 	}
 	@Then("user captures the tooltip message")
 	public void user_captures_the_tooltip_message() {
-		
+
 		String ExpectedText = "Github";
 
 		WebElement toolTip = driver.findElement(By.xpath("//*[@class=\"socialbtns\"]/div/a[4]"));
@@ -161,6 +168,146 @@ public class End2EndTestsJavaClass {
 	}
 
 
+	@Given("User launched the site")
+	public void user_launched_the_site() {
 
+		System.setProperty("webdriver.edgedriver.driver", "D:\\Selenium Tutorial\\edgedriver_win64\\msedgedriver.exe");
+		driver = new EdgeDriver();
+
+		driver.get("https://demo.seleniumeasy.com/drag-and-drop-demo.html");
+
+		driver.manage().window().maximize();
+
+	}
+	@When("user drag and drops the icon from source to the destination")
+	public void user_drag_and_drops_the_icon_from_source_to_the_destination() throws Throwable {
+		Actions action = new Actions(driver);
+		WebElement element1 = driver.findElement(By.xpath("//*[@id='todrag']/span[1]"));
+
+		WebElement destination = driver.findElement(By.xpath("//*[@id='mydropzone']"));
+
+		JavascriptExecutor js = (JavascriptExecutor)driver;
+		js.executeScript("window.scrollBy(0,300)");
+
+		Thread.sleep(20);
+		action.dragAndDrop(element1, destination).build().perform();;
+
+		System.out.println("Items dragged and dropped\n");
+	}
+
+	@Then("the Dropped Items list shows the icon")
+	public void the_dropped_items_list_shows_the_icon() throws IOException {
+		WebElement DroppedItems = driver.findElement(By.xpath("//*[@id='droppedlist']"));
+
+		System.out.println("List: "+DroppedItems.getText());
+
+		TakesScreenshot src =  ((TakesScreenshot)driver);
+		File srcFile = src.getScreenshotAs(OutputType.FILE);
+
+		File dest = new File("D:\\Selenium Tutorial\\Workspace\\CucumberFramework\\Test.png");
+
+		FileUtils.copyFile(srcFile, dest);
+
+		System.out.println("Screenshots Taken Successfully");
+
+		driver.quit();
+	}
+
+
+
+	@Given("user launches the site for keyboard actions")
+	public void user_launches_the_site_for_keyboard_actions() {
+
+		System.setProperty("webdriver.edgedriver.driver", "D:\\Selenium Tutorial\\edgedriver_win64\\msedgedriver.exe");
+		driver = new EdgeDriver();
+
+		driver.get("https://demo.guru99.com/test/newtours/index.php");
+
+		driver.manage().window().maximize();
+
+	}
+
+	@When("user enters username and password using keyboard actions")
+	public void user_enters_username_and_password_using_keyboard_actions() {
+
+		WebElement username = driver.findElement(By.name("userName"));
+		WebElement pass = driver.findElement(By.name("password"));
+
+		Actions action = new Actions(driver);
+		action.moveToElement(username)
+		.click()
+		.sendKeys(username, "Jack")
+		.build().perform();
+
+		action.moveToElement(pass).click().sendKeys(pass, "Jack").build().perform();
+
+
+	}
+	@Then("user extracts username and prints on console and then clicks on submit button")
+	public void user_extracts_username_and_prints_on_console_and_then_clicks_on_submit_button() throws IOException {
+		Actions act = new Actions(driver);
+		WebElement username = driver.findElement(By.name("userName"));
+
+		act.moveToElement(username).doubleClick(username).build().perform();
+		System.out.println("Username: "+username.getText());
+
+		TakesScreenshot src =  ((TakesScreenshot)driver);
+		File srcFile = src.getScreenshotAs(OutputType.FILE);
+
+		File dest = new File("D:\\Selenium Tutorial\\Workspace\\CucumberFramework\\Flight1.png");
+
+		FileUtils.copyFile(srcFile, dest);
+
+		System.out.println("Screenshot 1 Taken Successfully");
+		
+		driver.findElement(By.name("submit")).click();
+	}
+	@Then("prints the success message")
+	public void prints_the_success_message() throws IOException {
+
+		WebElement text1 = driver.findElement(By.xpath("//*[contains(text(),'Login Successfully')]"));
+		WebElement text2 = driver.findElement(By.xpath("//*[contains(text(),' Thank you for Loggin. ')]"));
+
+		System.out.println("Message :"+text1+"\n"+text2);	
+	
+	}
+
+	
+	
+	
+	@Before
+	public void beforeScenario()
+	{
+		System.out.println("-------------Start Test --------------");
+	}
+	
+	 @AfterStep
+	    public void beforeEachStep(io.cucumber.java.Scenario sc) throws IOException{
+		 
+		 
+		 if(sc.isFailed())
+			{
+				TakesScreenshot src =  ((TakesScreenshot)driver);
+				byte[] screenshot = src.getScreenshotAs(OutputType.BYTES);
+				sc.attach(screenshot, "image/png", "Screenshot taken for Passed scenarios");
+				
+
+			}
+			else
+			{
+				TakesScreenshot src =  ((TakesScreenshot)driver);
+				byte[] screenshot = src.getScreenshotAs(OutputType.BYTES);
+				sc.attach(screenshot, "image/png", "Screenshot taken for Passed scenarios");
+			
+			}
+	    }
+	@After
+	public void after_scenario()
+	{
+		
+		driver.quit();
+		
+		System.out.println("-------------Test Completed--------------");
+	}
 
 }

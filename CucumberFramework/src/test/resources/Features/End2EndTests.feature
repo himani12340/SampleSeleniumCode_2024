@@ -24,6 +24,21 @@ Given user launches the url to test tooltip functionality
 When user hovers the mouse over the icon 
 Then user captures the tooltip message 
 
+
+@MouseActions
+Scenario: Perform mouse Actions
+Given User launched the site
+When user drag and drops the icon from source to the destination
+Then the Dropped Items list shows the icon
+
+@KeyboardEvent
+Scenario: Perform Keyboard Actions
+Given user launches the site for keyboard actions
+When user enters username and password using keyboard actions
+Then user extracts username and prints on console and then clicks on submit button
+And prints the success message 
+
+
 @Image
 Scenario: 
 Given 

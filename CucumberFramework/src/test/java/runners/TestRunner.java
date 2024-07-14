@@ -12,7 +12,7 @@ import io.cucumber.junit.Cucumber;
 		,features ={"src/test/resources/Features/End2EndTests.feature"}
 		//,features ={"src/test/resources/Features/seleniumEasyDemoSite.feature"}
 		,glue= {"stepDefinitions"}
-		, tags = "@Tooltip"	
+		, tags = "@KeyboardEvent"	
 		
 		//,tags="@Tag1 or @Tag2"	
 		)
